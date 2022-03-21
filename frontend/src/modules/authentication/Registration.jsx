@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Joi from 'joi'
 import AuthService from "../../services/AuthService";
 import Input from "../../components/common/fields/Input";
@@ -9,7 +9,6 @@ const Registration = () => {
     const [data, setData] = useState({login: '', password: '', confirm_password: ''});
     const [errors, setErrors] = useState([]);
     const [response, setResponse] = useState();
-    const navigate = useNavigate();
 
     const schema = Joi.object({
         login: Joi.string()

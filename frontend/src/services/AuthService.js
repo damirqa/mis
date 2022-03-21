@@ -12,8 +12,8 @@ export async function registration(email, password, confirm_password) {
 }
 
 export async function login(email, password) {
-    const { data: jwt } =  await http.post(authUrl, { email, password });
-    localStorage.setItem(tokenKey, jwt);
+    return await http.post(authUrl + '/login', { email, password });
+    //localStorage.setItem(tokenKey, jwt.token);
 }
 
 export function loginWithJwt(jwt) {
