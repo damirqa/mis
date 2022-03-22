@@ -5,13 +5,21 @@ import Registration from "./modules/authentication/Registration";
 import PasswordReset from "./modules/authentication/PasswordReset";
 import ForgotPassword from "./modules/authentication/ForgotPassword";
 import AuthService from "./services/AuthService";
-import PageNotFound from "./components/PageNotFound";
+import AsideBar from "./components/asideBar/AsideBar";
+import Dashboard from "./components/Dashboard";
 
 function App() {
     const currentUser = AuthService.getCurrentUser()
 
     if (currentUser) {
-
+        return (
+            <BrowserRouter>
+                <Dashboard/>
+                <Routes>
+                    <Route/>
+                </Routes>
+            </BrowserRouter>
+        );
     }
     else {
         return (
@@ -21,7 +29,7 @@ function App() {
                     <Route path='/register' element={<Registration/>} />
                     <Route path='/forgot-password' element={<ForgotPassword/>}/>
                     <Route path='/password-reset' element={<PasswordReset/>} />
-                    <Route path='*' element={<PageNotFound/>} />
+                    <Route path='*' element={<Authentication/>} />
                 </Routes>
             </BrowserRouter>
         );
