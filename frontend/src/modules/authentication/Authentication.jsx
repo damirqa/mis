@@ -5,6 +5,7 @@ import Input from "../../components/common/fields/Input";
 import InputWithLink from "../../components/common/fields/InputWithLink";
 import AuthService from "../../services/AuthService";
 import Alert from "../../components/common/alert/Alert";
+import CentralPlace from "../../components/CentralPlace";
 
 const Authentication = () => {
     const [data, setData] = useState({login: '', password: ''});
@@ -65,7 +66,7 @@ const Authentication = () => {
     }
 
     return (
-        <div className='flex flex-row min-h-screen items-center justify-center bg-blue-50'>
+        <CentralPlace>
             <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
                 <div className='pb-9 text-center'>
                     <h1 className='text-4xl font-bold'>Sign in to Shaniyazov</h1>
@@ -89,7 +90,7 @@ const Authentication = () => {
                     )}
                 </form>
             </div>
-        </div>
+        </CentralPlace>
     );
 };
 

@@ -4,6 +4,7 @@ import Joi from 'joi'
 import AuthService from "../../services/AuthService";
 import Input from "../../components/common/fields/Input";
 import Alert from "../../components/common/alert/Alert";
+import CentralPlace from "../../components/CentralPlace";
 
 const Registration = () => {
     const [data, setData] = useState({login: '', password: '', confirm_password: ''});
@@ -66,7 +67,7 @@ const Registration = () => {
     }
 
     return (
-        <div className='flex flex-row min-h-screen items-center justify-center bg-blue-50'>
+        <CentralPlace>
             <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
                 <div className='pb-9 text-center'>
                     <h1 className='text-4xl font-bold'>Register for Shaniyazov</h1>
@@ -93,7 +94,7 @@ const Registration = () => {
                     )}
                 </form>
             </div>
-        </div>
+        </CentralPlace>
     );
 };
 

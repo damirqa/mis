@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 import Input from "../../components/common/fields/Input";
+import CentralPlace from "../../components/CentralPlace";
 
 const PasswordReset = () => {
     const [data, setData] = useState({password: '', repeat_password: ''});
@@ -14,7 +15,7 @@ const PasswordReset = () => {
     }
 
     return (
-        <div className='flex flex-row min-h-screen items-center justify-center bg-blue-50'>
+        <CentralPlace>
             <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
                 <div className='pb-9 text-center'>
                     <h1 className='text-4xl font-bold'>Password Reset</h1>
@@ -31,7 +32,7 @@ const PasswordReset = () => {
                     </button>
                 </form>
             </div>
-        </div>
+        </CentralPlace>
     );
 };
 
