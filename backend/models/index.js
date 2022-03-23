@@ -1,9 +1,11 @@
 const User = require('./User')
-const Patient = require('./Patient')
-const Doctor = require('./Doctor')
+const Project = require('./Project')
+const ProjectTypes = require('./ProjectTypes')
+const ProjectUsers = require('./ProjectUsers')
 
 module.exports = {
     User,
-    Patient,
-    Doctor
+    Project,
+    ProjectTypes,
+    ProjectUsers
 }
