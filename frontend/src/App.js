@@ -5,16 +5,22 @@ import Registration from "./modules/authentication/Registration";
 import PasswordReset from "./modules/authentication/PasswordReset";
 import ForgotPassword from "./modules/authentication/ForgotPassword";
 import AuthService from "./services/AuthService";
-import AsideBar from "./components/asideBar/AsideBar";
+import ProjectService from './services/ProjectService'
 import Dashboard from "./components/Dashboard";
+import Navbar from "./components/Navbar";
+import CentralPlace from "./components/CentralPlace";
 
 function App() {
     const currentUser = AuthService.getCurrentUser()
+    const projects = ProjectService.getProjects(currentUser.id).data
 
     if (currentUser) {
         return (
             <BrowserRouter>
-                <Dashboard/>
+                <Navbar/>
+                {projects
+                    ? <Dashboard/>
+                    : <CentralPlace><h1 className='text-4xl font-medium'>You don't have any projects</h1></CentralPlace>}
                 <Routes>
                     <Route/>
                 </Routes>

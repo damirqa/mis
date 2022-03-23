@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from "./Modal";
+import CreateProject from "./CreateProject";
 
 const Navbar = () => {
     return (
@@ -20,7 +21,9 @@ const Navbar = () => {
                         className="text-white bg-blue-700 py-2 px-4 rounded-md font-medium">
                     Create
                 </button>
-                <Modal id='authentication-modal'/>
+                <Modal id='authentication-modal' title='Create a project'>
+                    <CreateProject/>
+                </Modal>
             </div>
         </nav>
     );
