@@ -1,101 +1,78 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import axios from "axios";
-import Joi from "joi";
 import config from '../config.json'
-import AuthService from '../services/AuthService'
-import Input from './common/fields/Input'
-import Select from "./common/fields/Select";
-import Textarea from "./common/fields/Textarea";
 import HiddenInput from "./common/fields/HiddenInput";
+import Input from "./common/fields/Input";
+import Textarea from "./common/fields/Textarea";
+import Select from "./common/fields/Select";
 import Alert from "./common/alert/Alert";
+import Form from "./common/form/Form";
 import ProjectService from "../services/ProjectService";
+import AuthService from "../services/AuthService";
 
-const CreateProject = () => {
-    const [data, setData] = useState({name: '', type: '', description: '', owner: ''})
-    const [errors, setErrors] = useState([]);
-    const [response, setResponse] = useState();
-    const [projectTypes, setProjectTypes] = useState([])
+class CreateProject extends Form {
 
-    const schema = Joi.object({
-        name: Joi.string().required().empty('').messages({"any.required": "Name must be fill in"}),
-        type: Joi.number().required().empty('').messages({"any.required": "Type must be fill in"}),
-        owner: Joi.number().required().empty('').messages({"any.required": "Owner must be fill in"}),
-        description: Joi.string().empty('')
-    })
+    state = {
+        data: {name: '', type: '', description: '', owner: ''},
+        projectTypes: [],
+        response: null,
+        errors: []
+    }
 
-    useEffect( async () => {
-        const pt = await axios.post(config.api_url + '/project-types')
-        setProjectTypes(pt.data)
+    async componentDidMount() {
+        const fetchProjectTypes = await axios.post(config.api_url + '/project-types')
+        const projectTypes = fetchProjectTypes.data
 
         const owner = AuthService.getCurrentUser().id
+        const data = this.state.data
+        data.owner = owner
 
-        const project = data
-        project.owner = owner
-        setData(project)
-    }, [])
-
-    const handleChange = e => {
-        setData({...data, [e.target.id]: e.target.value })
+        this.setState({data, projectTypes})
     }
 
-    const validate = () => {
-        const { error } = schema.validate(data, {abortEarly: false})
-
-        if (!error ) return [];
-
-        const errorList = [];
-        error.details.forEach((value, index) => {
-            errorList[index + 1] = value.message
-        })
-
-        return errorList;
-    }
-
-    const handleSubmit = async e => {
-        e.preventDefault();
-
-        const errorList = validate()
-        setErrors(errorList)
-
-        if (errorList.length > 0) return;
-
-        const response = await ProjectService.createProject(data)
+    async doSubmit() {
+        const response = await ProjectService.createProject(this.state.data)
         if (response.data.status === 'success') {
-            const project = response.data.project
+            const project = response.data.project // TODO
             delete response.data.project
         }
-        setResponse(response.data)
+        this.setState({response: response.data})
     }
 
-    return (
-        <div className='p-5'>
-            <form onSubmit={handleSubmit}>
-                <HiddenInput name='owner' data={data}/>
 
-                <div className='mb-5'>
-                    <Input name='name' label='Name'  data={data} onChange={handleChange}/>
-                </div>
+    render() {
+        const {data, projectTypes, errors, response} = this.state
 
-                <div className='mb-5'>
-                    <Select name='type' label='Type' data={projectTypes} onChange={handleChange}/>
-                </div>
+        return (
+            <div className='p-5'>
+                <form onSubmit={this.handleSubmit}>
+                    <HiddenInput name='owner' data={data}/>
 
-                <div className='mb-5'>
-                    <Textarea name='description' label='Description' data={data} onChange={handleChange}/>
-                </div>
+                    <div className='mb-5'>
+                        <Input name='name' label='Name'  data={data} onChange={this.handleChange}/>
+                    </div>
 
-                <button type="submit"
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg w-full px-5 py-2.5 text-center">Submit
-                </button>
-            </form>
-            {errors.length > 0 && (
-                errors.map((error, index) => <Alert key={index} type='danger' message={`${index}) ${error}`} />)
-            )}
-            {response && (
-                <Alert type={response.status} message={response.message}/>
-            )}
-        </div>
-    );
-};
+                    <div className='mb-5'>
+                        <Select name='type' label='Type' data={projectTypes} onChange={this.handleChange}/>
+                    </div>
+
+                    <div className='mb-5'>
+                        <Textarea name='description' label='Description' data={data} onChange={this.handleChange}/>
+                    </div>
+
+                    <button type="submit"
+                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg w-full px-5 py-2.5 text-center">Submit
+                    </button>
+                </form>
+                {errors.length > 0 && (
+                    errors.map((error, index) => <Alert key={index} type='danger' message={`${index}) ${error}`} />)
+                )}
+                {response && (
+                    <Alert type={response.status} message={response.message}/>
+                )}
+            </div>
+        );
+    }
+}
 
 export default CreateProject;
