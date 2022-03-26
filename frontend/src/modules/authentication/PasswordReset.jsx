@@ -1,39 +1,46 @@
-import React, {useState} from 'react';
-import {Link} from "react-router-dom";
+import React from 'react';
+import Joi from "joi";
+import Form from "../../components/common/form/Form";
 import Input from "../../components/common/fields/Input";
+import SendButton from "../../components/common/button/SendButton";
 import CentralPlace from "../../components/CentralPlace";
 
-const PasswordReset = () => {
-    const [data, setData] = useState({password: '', repeat_password: ''});
-
-    const handleChange = e => {
-        setData({...data, [e.target.id]: e.target.value })
+class PasswordReset extends Form {
+    state = {
+        data: {password: "", repeat_password: ""},
+        response: null, //TODO check for necessity
+        errors: [], //TODO check for necessity
+        loading: false
     }
 
-    const handleSubmit = e => {
-        e.preventDefault();
+    schema = Joi.object() //TODO
+
+    doSubmit() {
+        //TODO
     }
 
-    return (
-        <CentralPlace>
-            <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
-                <div className='pb-9 text-center'>
-                    <h1 className='text-4xl font-bold'>Password Reset</h1>
+    render() {
+        const {data, loading} = this.state
+
+        return (
+            <CentralPlace>
+                <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
+                    <div className='pb-9 text-center'>
+                        <h1 className='text-4xl font-bold'>Password Reset</h1>
+                    </div>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="mb-6">
+                            <Input name='password' type='password' label='Password' data={data} onChange={this.handleChange}/>
+                        </div>
+                        <div className="mb-6">
+                            <Input name='repeat_password' type='password' label='Repeat Password' data={data} onChange={this.handleChange}/>
+                        </div>
+                        <SendButton text='Submit' loading={loading}/>
+                    </form>
                 </div>
-                <form>
-                    <div className="mb-6">
-                        <Input name='password' type='password' label='Password' data={data} required={true} onChange={handleChange}/>
-                    </div>
-                    <div className="mb-6">
-                        <Input name='repeat_password' type='password' label='Repeat Password' data={data} required={true} onChange={handleChange}/>
-                    </div>
-                    <button type="submit"
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg w-full px-5 py-2.5 text-center">Submit
-                    </button>
-                </form>
-            </div>
-        </CentralPlace>
-    );
-};
+            </CentralPlace>
+        );
+    }
+}
 
 export default PasswordReset;

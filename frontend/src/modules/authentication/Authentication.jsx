@@ -64,9 +64,9 @@ class Authentication extends Form {
                         <div className="mb-6">
                             <InputWithLink name='password' type='password' label='Password' data={data} link='/forgot-password' textLink='Forgot password?' onChange={this.handleChange}/>
                         </div>
-                        <SendButton loading={loading}/>
+                        <SendButton text='Submit' loading={loading}/>
                         {errors.length > 0 && (
-                            errors.map((error, index) => <Alert type='danger' message={`${index}) ${error}`} />)
+                            errors.map((error, index) => <Alert key={index} type='danger' message={`${index}) ${error}`} />)
                         )}
                         {response && (
                             <Alert type={response.status} message={response.message}/>

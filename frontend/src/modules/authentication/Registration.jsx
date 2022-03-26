@@ -1,17 +1,22 @@
-import React, {useState} from 'react';
+import React from 'react';
+import Joi from "joi";
 import {Link} from "react-router-dom";
-import Joi from 'joi'
-import AuthService from "../../services/AuthService";
+import Form from "../../components/common/form/Form";
 import Input from "../../components/common/fields/Input";
 import Alert from "../../components/common/alert/Alert";
+import SendButton from "../../components/common/button/SendButton";
+import AuthService from "../../services/AuthService";
 import CentralPlace from "../../components/CentralPlace";
 
-const Registration = () => {
-    const [data, setData] = useState({login: '', password: '', confirm_password: ''});
-    const [errors, setErrors] = useState([]);
-    const [response, setResponse] = useState();
+class Registration extends Form {
+    state = {
+        data: {login: "", password: "", confirm_password: ""},
+        response: null,
+        errors: [],
+        loading: false
+    }
 
-    const schema = Joi.object({
+    schema = Joi.object({
         login: Joi.string()
             .email({tlds:{allow: false}})
             .messages({
@@ -33,69 +38,49 @@ const Registration = () => {
             })
     })
 
-    const handleChange = e => {
-        setData({...data, [e.target.id]: e.target.value })
-    }
-
-    const validate = () => {
-        const { error } = schema.validate(data, {abortEarly: false})
-
-        if (!error ) return [];
-
-        const errorList = [];
-        error.details.forEach((value, index) => {
-            errorList[index + 1] = value.message
-        })
-
-        return errorList;
-    }
-
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        const errorList = validate()
-        setErrors(errorList)
-
-        if (errorList.length > 0) return;
-
+    doSubmit() {
+        const {data} = this.state
+        this.setState({loading: true})
         const response = AuthService.registration(data.login, data.password, data.confirm_password)
 
         response.then(result => {
-            setResponse(result.data)
+            this.setState({response: result.data, loading: false})
         })
         .catch(error => console.log(error.data))
     }
 
-    return (
-        <CentralPlace>
-            <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
-                <div className='pb-9 text-center'>
-                    <h1 className='text-4xl font-bold'>Register for Shaniyazov</h1>
-                    <div>All ready have an account? <Link to='/login' className='text-blue-600 hover:underline'>Sign in here</Link></div>
+    render() {
+        const {data, errors, response, loading} = this.state
+
+        return (
+            <CentralPlace>
+                <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
+                    <div className='pb-9 text-center'>
+                        <h1 className='text-4xl font-bold'>Register for Shaniyazov</h1>
+                        <div>All ready have an account? <Link to='/login' className='text-blue-600 hover:underline'>Sign in here</Link></div>
+                    </div>
+                    <form onSubmit={this.handleSubmit}>
+                        <div className="mb-6">
+                            <Input name='login' type='text' label='Email Address' data={data} onChange={this.handleChange} />
+                        </div>
+                        <div className="mb-6">
+                            <Input name='password' type='password' label='Password' data={data} onChange={this.handleChange}/>
+                        </div>
+                        <div className="mb-6">
+                            <Input name='confirm_password' type='password' label='Confirm Password' data={data} onChange={this.handleChange} />
+                        </div>
+                        <SendButton text='Submit' loading={loading}/>
+                        {errors.length > 0 && (
+                            errors.map((error, index) => <Alert key={index} type='danger' message={`${index}) ${error}`} />)
+                        )}
+                        {response && (
+                            <Alert type={response.status} message={response.message}/>
+                        )}
+                    </form>
                 </div>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-6">
-                        <Input name='login' type='text' label='Email Address' data={data} onChange={handleChange} />
-                    </div>
-                    <div className="mb-6">
-                        <Input name='password' type='password' label='Password' data={data} onChange={handleChange}/>
-                    </div>
-                    <div className="mb-6">
-                        <Input name='confirm_password' type='password' label='Confirm Password' data={data} onChange={handleChange} />
-                    </div>
-                    <button type="submit"
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg w-full px-5 py-2.5 text-center">Submit
-                    </button>
-                    {errors.length > 0 && (
-                        errors.map((error, index) => <Alert type='danger' message={`${index}) ${error}`} />)
-                    )}
-                    {response && (
-                        <Alert type={response.status} message={response.message}/>
-                    )}
-                </form>
-            </div>
-        </CentralPlace>
-    );
-};
+            </CentralPlace>
+        );
+    }
+}
 
 export default Registration;
