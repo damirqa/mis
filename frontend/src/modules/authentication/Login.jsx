@@ -9,7 +9,7 @@ import AuthService from "../../services/AuthService";
 import CentralPlace from "../../components/CentralPlace";
 import InputWithLink from "../../components/common/fields/InputWithLink";
 
-class Authentication extends Form {
+class Login extends Form {
 
     state = {
         data: {login: "", password: ""},
@@ -78,4 +78,4 @@ class Authentication extends Form {
     }
 }
 
-export default Authentication;
+export default Login;

@@ -1,6 +1,6 @@
 import React from "react";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
-import Authentication from "./modules/authentication/Authentication";
+import Login from "./modules/authentication/Login";
 import Registration from "./modules/authentication/Registration";
 import PasswordReset from "./modules/authentication/PasswordReset";
 import ForgotPassword from "./modules/authentication/ForgotPassword";
@@ -31,11 +31,11 @@ function App() {
         return (
             <BrowserRouter>
                 <Routes>
-                    <Route path='/login' element={<Authentication/>} />
+                    <Route path='/login' element={<Login/>} />
                     <Route path='/register' element={<Registration/>} />
                     <Route path='/forgot-password' element={<ForgotPassword/>}/>
                     <Route path='/password-reset' element={<PasswordReset/>} />
-                    <Route path='*' element={<Authentication/>} />
+                    <Route path='*' element={<Login/>} />
                 </Routes>
             </BrowserRouter>
         );
