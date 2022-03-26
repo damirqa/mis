@@ -12,7 +12,7 @@ import CentralPlace from "./components/CentralPlace";
 
 function App() {
     const currentUser = AuthService.getCurrentUser()
-    const projects = ProjectService.getProjects(currentUser.id).data
+    const projects = currentUser ? ProjectService.getProjects(currentUser.id).data : null
 
     if (currentUser) {
         return (

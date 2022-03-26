@@ -1,5 +1,5 @@
 import React from 'react';
-import CloseButton from "../closeButton/CloseButton";
+import CloseButton from "../button/CloseButton";
 
 const Toast = ({id, message, icon: Icon}) => {
     return (
