@@ -15,7 +15,7 @@ router.post('/all', async (req, res) => {
 
 router.post('/create', async (req, res) => {
     const {name, type, description, owner} = req.body
-    
+
     if (!name || !type || !owner) return res.json({status: "danger", message: "One of the fields is not filled in"})
 
     const project = await Project.create(req.body)
