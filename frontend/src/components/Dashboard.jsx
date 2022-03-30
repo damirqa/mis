@@ -1,17 +1,34 @@
 import React from 'react';
 import AsideBar from "./asideBar/AsideBar";
+import {BrowserRouter, Routes} from "react-router-dom";
+import Navbar from "./Navbar";
 
-const Dashboard = ({projects}) => {
+const Dashboard = () => {
     return (
-        <React.Fragment>
+        <BrowserRouter>
+            <Navbar/>
+
             <div className='flex'>
                 <AsideBar/>
                 <div className='w-full'>
 
                 </div>
             </div>
-        </React.Fragment>
+
+            <Routes>
+
+            </Routes>
+        </BrowserRouter>
     );
 };
 
 export default Dashboard;
+
+// <React.Fragment>
+//     <div className='flex'>
+//         <AsideBar/>
+//         <div className='w-full'>
+//
+//         </div>
+//     </div>
+// </React.Fragment>
