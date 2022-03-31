@@ -14,8 +14,9 @@ User.init(
         auth_key: {type: DataTypes.STRING},
         password_hash: {type: DataTypes.STRING},
         password_reset_token: {type: DataTypes.STRING},
-        email: {type: DataTypes.STRING, unique: true},
-        email_confirmed: {type: DataTypes.BOOLEAN},
+        email: {type: DataTypes.STRING, unique: true, allowNull: false},
+        email_confirm_token: {type: DataTypes.STRING},
+        email_confirmed: {type: DataTypes.BOOLEAN, defaultValue: false},
         status: {type: DataTypes.BOOLEAN},
     },
     { sequelize, modelName: 'user', timestamps: true}

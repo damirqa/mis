@@ -2,6 +2,7 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
+const authenticationController = require('../controllers/AuthenticationController')
 const User = require('../models/index').User
 const error = require('../error/ApiError')
 
@@ -12,56 +13,16 @@ const createJwt = (id, email, role) => {
         {expiresIn: '24h'}
     )
 }
+router.post('/register', authenticationController.registration)
 
-router.post('/login', async (req, res) => {
-    const {email, password} = req.body
+router.post('/login', authenticationController.login)
 
-    if (!email || !password) return res.json({status: "danger", message: "One of the fields is not filled in"})
+router.post('/logout', authenticationController.logout)
 
-    const user = await User.findOne({where: {email}})
+router.get('/confirm-email/:token', authenticationController.confirmEmail)
 
-    if (!user) return res.json({status: "danger", message: "Invalid username or password"})
+router.get('/refresh-token', authenticationController.refresh)
 
-    let comparePassword = bcrypt.compareSync(password, user.password_hash)
-
-    if (!comparePassword) return res.json({status: "danger", message: "Invalid username or password"})
-
-    const token = createJwt(user.id, user.email, user.role)
-
-    res.json({status: 'success', message: 'You have successfully logged in', token})
-
-})
-
-router.post('/register', async (req, res) => {
-    try {
-        const {email, password, confirm_password} = req.body
-
-        if (!email || !password || !confirm_password) return res.json({status: "danger", message: "One of the fields is not filled in"})
-        if (password !== confirm_password)            return res.json({status: "danger", message: "Passwords don't match"})
-
-        let findUser = await User.findOne({ where: { email }})
-
-        if (findUser) return res.json({status: "danger", message: "The mail is already busy"})
-
-        const user = await User.create({
-            username: email,
-            email: email,
-            password_hash: await bcrypt.hash(password, 3),
-            role: 'user',
-            status: true
-        })
-
-        if (user) return res.json({status: "success", message: "You have successfully registered"})
-
-        return res.json({status: "danger", message: "Unknown error"})
-    }
-    catch (e) {
-        return error.internal(e.message)
-    }
-})
-
-router.post('/forgot-password', (req, res) => {
-
-})
+router.get('/forgot-password', authenticationController.logout) // TODO FIX
 
 module.exports = router
