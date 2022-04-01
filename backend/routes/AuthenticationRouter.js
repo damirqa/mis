@@ -2,9 +2,11 @@ const express = require('express')
 const bcrypt = require('bcrypt')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
+const { body } = require('express-validator')
+
 const authenticationController = require('../controllers/AuthenticationController')
 const User = require('../models/index').User
-const error = require('../error/ApiError')
+const error = require('../exceptions/ApiError')
 
 const createJwt = (id, email, role) => {
     return jwt.sign(
@@ -13,9 +15,13 @@ const createJwt = (id, email, role) => {
         {expiresIn: '24h'}
     )
 }
-router.post('/register', authenticationController.registration)
+router.post('/register',
+    body('email').isEmail().normalizeEmail(),
+    body('password').isLength({min: 8, max: 16}),
+    authenticationController.registration)
 
-router.post('/login', authenticationController.login)
+router.post('/login',
+    authenticationController.login)
 
 router.post('/logout', authenticationController.logout)
 

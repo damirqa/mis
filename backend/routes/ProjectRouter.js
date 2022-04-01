@@ -22,7 +22,7 @@ router.post('/create', async (req, res) => {
 
     if (project) return res.json({status: "success", message: "The project was successfully created", project: project})
 
-    return res.json({status: "danger", message: "Unknown error"})
+    return res.json({status: "danger", message: "Unknown exceptions"})
 
 })
 

@@ -1,18 +1,24 @@
 const {User} = require('../models/index')
+const ApiError = require('../exceptions/ApiError')
 const UserService = require('../services/UserService')
+const { validationResult } = require('express-validator')
 
 class AuthenticationController {
 
     async registration(req, res, next) {
         try {
-            const userData = await UserService.registration(req)
+            const errors = validationResult(req)
+            if (!errors.isEmpty()) return next(ApiError.BadRequest('Validation error', errors.array()))
+
+            const {email, password, confirm_password} = req.body
+            const userData = await UserService.registration(email, password, confirm_password)
 
             res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
 
             return res.json(userData)
         }
-        catch (e) {
-            console.log(e)
+    catch (e) {
+            next(e)
         }
     }
 
@@ -20,40 +26,36 @@ class AuthenticationController {
         try {
             const {email, password} = req.body
 
-            if (!email || !password) throw new Error('One of the fields is not filled in')
+            const userData = await UserService.login(email, password)
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
 
-            const user = await User.findOne({where: {email}})
-
-            if (!user)  throw new Error('Invalid username or password')
-
-            let comparePassword = bcrypt.compareSync(password, user.password_hash)
-
-            if (!comparePassword) return res.json({status: "danger", message: "Invalid username or password"})
-
-            const token = createJwt(user.id, user.email, user.role)
-
-            res.json({status: 'success', message: 'You have successfully logged in', token})
+            return res.json(userData)
         }
         catch (e) {
-            console.log(e)
+            next(e)
         }
     }
 
     async logout(req, res, next) {
         try {
-
+            const {refreshToken} = req.cookies
+            const userData = await UserService.logout(refreshToken)
+            res.clearCookie('refreshToken')
+            return userData
         }
         catch (e) {
-            console.log(e)
+            next(e)
         }
     }
 
     async refresh(req, res, next) {
         try {
-
+            const {refreshToken} = req.cookies
+            const userData = await UserService.refresh(refreshToken)
+            res.cookie('refreshToken', userData.refreshToken, {maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true})
         }
         catch (e) {
-            console.log(e)
+            next(e)
         }
     }
 
@@ -64,7 +66,7 @@ class AuthenticationController {
             return res.redirect(process.env.APP_URL)
         }
         catch (e) {
-            console.log(e)
+            next(e)
         }
     }
 }
