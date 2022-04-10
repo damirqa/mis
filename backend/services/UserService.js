@@ -78,7 +78,7 @@ class UserService {
             throw ApiError.UnauthorizedError()
         }
 
-        const user = await User.findByPk(userData.userId)
+        const user = await User.findByPk(userData.id)
         const userDto = new UserDto(user)
         const tokens = TokenService.generateTokens({...userDto})
         await TokenService.saveToken(userDto.id, tokens.refreshToken)
