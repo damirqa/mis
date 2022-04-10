@@ -1,27 +1,22 @@
 import React from "react";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
-import AuthService from "./services/AuthService";
-import ProjectService from './services/ProjectService'
 import Dashboard from "./components/Dashboard";
-import Navbar from "./components/Navbar";
-import CentralPlace from "./components/CentralPlace";
 import Authentication from "./modules/authentication/Authentication";
+import {useActions} from "./hooks/useActions";
+import {store} from "./store";
 
 function App() {
-    const currentUser = AuthService.getCurrentUser()
+    const auth = store.getState().auth
+    const {verifyAuthentication} = useActions()
 
-    return currentUser ? <Dashboard/> : <Authentication/>
+    const isAuth = async () => {
+        if (localStorage.getItem('token')) {
+            await verifyAuthentication()
+        }
 
+        return !auth.loading && auth.authResponse?.user
+    }
+
+    return isAuth() ? <Dashboard/> : <Authentication/>
 }
 
 export default App;
-
-// <BrowserRouter>
-//     <Navbar/>
-//     {projects
-//         ? <Dashboard/>
-//         : <CentralPlace><h1 className='text-4xl font-medium'>You don't have any projects</h1></CentralPlace>}
-//     <Routes>
-//         <Route/>
-//     </Routes>
-// </BrowserRouter>

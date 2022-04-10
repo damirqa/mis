@@ -8,18 +8,23 @@ import SendButton from "../../components/common/button/SendButton";
 import AuthService from "../../services/AuthService";
 import CentralPlace from "../../components/CentralPlace";
 import InputWithLink from "../../components/common/fields/InputWithLink";
+import {fetchUsers} from "../../action-creators/user";
+import {useActions} from "../../hooks/useActions";
+import {store} from "../../store";
 
 class Login extends Form {
 
     state = {
-        data: {login: "", password: ""},
+        data: {email: "", password: ""},
         response: null,
         errors: [],
         loading: false
     }
 
+
+
     schema = Joi.object({
-        login: Joi.string()
+        email: Joi.string()
             .email({tlds:{allow: false}})
             .messages({
                 "string.email": "Incorrect mail"
@@ -35,16 +40,11 @@ class Login extends Form {
 
     async doSubmit() {
         const {data} = this.state
-        this.setState({loading: true})
-        const response = AuthService.login(data.login, data.password)
-        response.then(result => {
-            this.setState({response: result.data, loading: false})
+        await this.props.login(data)
 
-            if (result.data.status === 'success') {
-                localStorage.setItem('token', result.data.token)
-                setTimeout(() => window.location.href = '/', 2000)
-            }
-        })
+        const authState = store.getState().auth
+        if (authState.authResponse) this.props.navigate('/forgot-password')
+
     }
 
     render() {
@@ -59,7 +59,7 @@ class Login extends Form {
                     </div>
                     <form onSubmit={this.handleSubmit}>
                         <div className="mb-6">
-                            <Input name='login' label='Login' data={data} onChange={this.handleChange}/>
+                            <Input name='email' label='Email' data={data} onChange={this.handleChange}/>
                         </div>
                         <div className="mb-6">
                             <InputWithLink name='password' type='password' label='Password' data={data} link='/forgot-password' textLink='Forgot password?' onChange={this.handleChange}/>

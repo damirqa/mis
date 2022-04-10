@@ -23,12 +23,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
-// <React.Fragment>
-//     <div className='flex'>
-//         <AsideBar/>
-//         <div className='w-full'>
-//
-//         </div>
-//     </div>
-// </React.Fragment>

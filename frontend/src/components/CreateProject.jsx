@@ -1,6 +1,4 @@
 import React from 'react';
-import axios from "axios";
-import config from '../config.json'
 import HiddenInput from "./common/fields/HiddenInput";
 import Input from "./common/fields/Input";
 import Textarea from "./common/fields/Textarea";
@@ -8,7 +6,6 @@ import Select from "./common/fields/Select";
 import Alert from "./common/alert/Alert";
 import Form from "./common/form/Form";
 import ProjectService from "../services/ProjectService";
-import AuthService from "../services/AuthService";
 
 class CreateProject extends Form {
 
@@ -19,15 +16,8 @@ class CreateProject extends Form {
         errors: []
     }
 
-    async componentDidMount() {
-        const fetchProjectTypes = await axios.post(config.api_url + '/project-types')
-        const projectTypes = fetchProjectTypes.data
+    componentDidMount() {
 
-        const owner = AuthService.getCurrentUser().id
-        const data = this.state.data
-        data.owner = owner
-
-        this.setState({data, projectTypes})
     }
 
     async doSubmit() {
