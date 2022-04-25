@@ -1,22 +1,24 @@
 import React from "react";
 import Dashboard from "./components/Dashboard";
-import Authentication from "./modules/authentication/Authentication";
-import {useActions} from "./hooks/useActions";
-import {store} from "./store";
+import AuthWare from './components/AuthWare'
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+
+import Authentication from './modules/authentication/Authentication'
+import NotFoundRedirect from './components/NotFoundRedirect'
 
 function App() {
-    const auth = store.getState().auth
-    const {verifyAuthentication} = useActions()
 
-    const isAuth = async () => {
-        if (localStorage.getItem('token')) {
-            await verifyAuthentication()
-        }
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path='/auth/*' element={<Authentication />} />
 
-        return !auth.loading && auth.authResponse?.user
-    }
+                <Route path='/dashboard/*' element={<AuthWare component={Dashboard} />} />
+                <Route path='*' element={<NotFoundRedirect />}/>
+            </Routes>
+        </BrowserRouter>
+    );
 
-    return isAuth() ? <Dashboard/> : <Authentication/>
 }
 
 export default App;

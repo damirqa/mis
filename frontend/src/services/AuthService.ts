@@ -5,8 +5,9 @@ import {AuthResponse} from "../modules/authentication/response/AuthResponse";
 
 export default class AuthService {
 
-    static async login(data: AuthLogin): Promise<AxiosResponse<AuthResponse>> {
-        return $api.post('/auth/login', data)
+    static async login(dataRequest: AuthLogin): Promise<AuthResponse> {
+        const {data} = await $api.post('/auth/login', dataRequest)
+        return data
     }
 
     static async registration(email: string, password: string, confirm_password: string): Promise<AxiosResponse<AuthResponse>> {
@@ -17,7 +18,8 @@ export default class AuthService {
         return $api.post('/auth/logout')
     }
 
-    static async verify(): Promise<AxiosResponse<AuthResponse>> {
-        return $api.get('/auth/refresh-token')
+    static async verify(): Promise<AuthResponse> {
+        const {data} = await $api.get('/auth/refresh-token')
+        return data
     }
 }

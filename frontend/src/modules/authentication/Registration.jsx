@@ -57,7 +57,7 @@ class Registration extends Form {
                 <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
                     <div className='pb-9 text-center'>
                         <h1 className='text-4xl font-bold'>Register for Shaniyazov</h1>
-                        <div>All ready have an account? <Link to='/login' className='text-blue-600 hover:underline'>Sign in here</Link></div>
+                        <div>All ready have an account? <Link to='/auth/login' className='text-blue-600 hover:underline'>Sign in here</Link></div>
                     </div>
                     <form onSubmit={this.handleSubmit}>
                         <div className="mb-6">

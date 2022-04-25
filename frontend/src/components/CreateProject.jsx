@@ -5,30 +5,40 @@ import Textarea from "./common/fields/Textarea";
 import Select from "./common/fields/Select";
 import Alert from "./common/alert/Alert";
 import Form from "./common/form/Form";
-import ProjectService from "../services/ProjectService";
 
 class CreateProject extends Form {
 
     state = {
         data: {name: '', type: '', description: '', owner: ''},
-        projectTypes: [],
+        projectTypes: [{id: 1, name: 'Kanban'}],
         response: null,
         errors: []
     }
 
     componentDidMount() {
+        const data = this.state.data
+        data.owner = this.props.owner
+        this.setState(data)
+    }
 
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps !== this.props) {
+            const data = this.state.data
+            data.owner = this.props.owner
+            this.setState(data)
+        }
     }
 
     async doSubmit() {
-        const response = await ProjectService.createProject(this.state.data)
-        if (response.data.status === 'success') {
-            const project = response.data.project // TODO
-            delete response.data.project
-        }
-        this.setState({response: response.data})
+        this.props.create(this.state.data)
+        this.props.navigate('/dashboard/projects/board')
+        // const response = await ProjectService.createProject(this.state.data)
+        // if (response.data.status === 'success') {
+        //     const project = response.data.project // TODO
+        //     delete response.data.project
+        // }
+        // this.setState({response: response.data})
     }
-
 
     render() {
         const {data, projectTypes, errors, response} = this.state

@@ -5,11 +5,8 @@ import Form from "../../components/common/form/Form";
 import Input from "../../components/common/fields/Input";
 import Alert from "../../components/common/alert/Alert";
 import SendButton from "../../components/common/button/SendButton";
-import AuthService from "../../services/AuthService";
 import CentralPlace from "../../components/CentralPlace";
 import InputWithLink from "../../components/common/fields/InputWithLink";
-import {fetchUsers} from "../../action-creators/user";
-import {useActions} from "../../hooks/useActions";
 import {store} from "../../store";
 
 class Login extends Form {
@@ -43,8 +40,7 @@ class Login extends Form {
         await this.props.login(data)
 
         const authState = store.getState().auth
-        if (authState.authResponse) this.props.navigate('/forgot-password')
-
+        if (authState.authResponse?.user) this.props.navigate('/dashboard')
     }
 
     render() {
@@ -55,14 +51,14 @@ class Login extends Form {
                 <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
                     <div className='pb-9 text-center'>
                         <h1 className='text-4xl font-bold'>Sign in to Shaniyazov</h1>
-                        <div>Don't have an account? <Link to='/register' className='text-blue-600 hover:underline'>Register here</Link></div>
+                        <div>Don't have an account? <Link to='/auth/register' className='text-blue-600 hover:underline'>Register here</Link></div>
                     </div>
                     <form onSubmit={this.handleSubmit}>
                         <div className="mb-6">
                             <Input name='email' label='Email' data={data} onChange={this.handleChange}/>
                         </div>
                         <div className="mb-6">
-                            <InputWithLink name='password' type='password' label='Password' data={data} link='/forgot-password' textLink='Forgot password?' onChange={this.handleChange}/>
+                            <InputWithLink name='password' type='password' label='Password' data={data} link='/auth/forgot-password' textLink='Forgot password?' onChange={this.handleChange}/>
                         </div>
                         <SendButton text='Submit' loading={loading}/>
                         {errors.length > 0 && (

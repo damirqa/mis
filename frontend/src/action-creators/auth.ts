@@ -8,8 +8,8 @@ export const login = (data: AuthLogin) => {
         try {
             dispatch({type: AuthActionTypes.FETCH_AUTH_DATA})
             const response = await AuthService.login(data)
-            dispatch({type: AuthActionTypes.FETCH_AUTH_DATA_SUCCESS, payload: response.data})
-            localStorage.setItem('token', response.data.accessToken)
+            dispatch({type: AuthActionTypes.FETCH_AUTH_DATA_SUCCESS, payload: response})
+            localStorage.setItem('token', response.accessToken)
         }
         catch (e) {
             dispatch({type: AuthActionTypes.FETCH_AUTH_DATA_ERROR, payload: e?.response?.data?.message})
@@ -17,13 +17,13 @@ export const login = (data: AuthLogin) => {
     }
 }
 
-export const verifyAuthentication = async () => {
+export const verifyAuthentication = ()  => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
             dispatch({type: AuthActionTypes.FETCH_AUTH_DATA})
             const response = await AuthService.verify()
-            dispatch({type: AuthActionTypes.FETCH_AUTH_DATA_SUCCESS, payload: response.data})
-            localStorage.setItem('token', response.data.accessToken)
+            dispatch({type: AuthActionTypes.FETCH_AUTH_DATA_SUCCESS, payload: response})
+            localStorage.setItem('token', response.accessToken)
         }
         catch (e) {
             dispatch({type: AuthActionTypes.FETCH_AUTH_DATA_ERROR, payload: e?.response?.data?.message})

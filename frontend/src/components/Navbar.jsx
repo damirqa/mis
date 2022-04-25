@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Modal from "./Modal";
-import CreateProject from "./CreateProject";
+import {Link} from 'react-router-dom'
+import CreateProjectWrapper from "./wrappers/CreateProjectWrapper";
 
 const Navbar = () => {
+
     return (
         <nav className='flex justify-between items-center bg-white font-medium border-b-2'>
             <div className='text-2xl p-2'>
@@ -10,10 +12,10 @@ const Navbar = () => {
             </div>
             <div>
                 <ul className='flex flex-row p-2'>
-                    <li className='px-2'><a href='/' className='hover:text-blue-700 cursor-pointer'>Your work</a></li>
-                    <li className='px-2'><a href='/' className='hover:text-blue-700 cursor-pointer'>Projects</a></li>
-                    <li className='px-2'><a href='/' className='hover:text-blue-700 cursor-pointer'>People</a></li>
-                    <li className='px-2'><a href='/' className='hover:text-blue-700 cursor-pointer'>Plans</a></li>
+                    <li className='px-2'><Link to='/dashboard/jobs' className='hover:text-blue-700 cursor-pointer'>Your work</Link></li>
+                    <li className='px-2'><Link to='/dashboard/projects' className='hover:text-blue-700 cursor-pointer'>Projects</Link></li>
+                    {/*<li className='px-2'><a href='/' className='hover:text-blue-700 cursor-pointer'>People</a></li>*/}
+                    {/*<li className='px-2'><a href='/' className='hover:text-blue-700 cursor-pointer'>Plans</a></li>*/}
                 </ul>
             </div>
             <div className='p-2'>
@@ -22,7 +24,7 @@ const Navbar = () => {
                     Create
                 </button>
                 <Modal id='authentication-modal' title='Create a project'>
-                    <CreateProject/>
+                    <CreateProjectWrapper/>
                 </Modal>
             </div>
         </nav>

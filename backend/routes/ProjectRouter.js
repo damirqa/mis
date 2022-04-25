@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const ProjectController = require('../controllers/ProjectController')
 const {Project, ProjectUsers, ProjectTypes} = require('../models/index')
 
 router.post('/all', async (req, res) => {
@@ -13,17 +14,8 @@ router.post('/all', async (req, res) => {
     return res.json({projects: projects_user})
 })
 
-router.post('/create', async (req, res) => {
-    const {name, type, description, owner} = req.body
+router.post('/create', ProjectController.create)
 
-    if (!name || !type || !owner) return res.json({status: "danger", message: "One of the fields is not filled in"})
-
-    const project = await Project.create(req.body)
-
-    if (project) return res.json({status: "success", message: "The project was successfully created", project: project})
-
-    return res.json({status: "danger", message: "Unknown exceptions"})
-
-})
+router.post('/get-last-project', ProjectController.getLastProject)
 
 module.exports = router

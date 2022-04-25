@@ -1,14 +1,14 @@
 import React from 'react';
-import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Login from "./Login";
+import {Route, Routes} from "react-router-dom";
 import Registration from "./Registration";
 import PasswordReset from "./PasswordReset";
 import ForgotPassword from "./ForgotPassword";
 import LoginWrapper from "./wrappers/LoginWrapper";
+import CentralPlace from "../../components/CentralPlace";
 
 const Authentication = () => {
     return (
-        <BrowserRouter>
+        <CentralPlace>
             <Routes>
                 <Route path='/login' element={<LoginWrapper/>} />
                 <Route path='/register' element={<Registration/>} />
@@ -16,7 +16,7 @@ const Authentication = () => {
                 <Route path='/password-reset' element={<PasswordReset/>} />
                 <Route path='*' element={<LoginWrapper/>} />
             </Routes>
-        </BrowserRouter>
+        </CentralPlace>
     );
 };
 

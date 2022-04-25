@@ -25,6 +25,10 @@ router.post('/login',
 
 router.post('/logout', authenticationController.logout)
 
+router.get('/test', (req, res) => {
+
+})
+
 router.get('/confirm-email/:token', authenticationController.confirmEmail)
 
 router.get('/refresh-token', authenticationController.refresh)

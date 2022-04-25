@@ -1,14 +1,14 @@
 import React from 'react';
 import Login from "../Login";
-import { useNavigate } from "react-router-dom";
 import {useActions} from "../../../hooks/useActions";
-import {useStore} from 'react-redux'
+import {useNavigate} from 'react-router-dom'
 
 const LoginWrapper = () => {
     const {fetchUsers, login} = useActions()
+    const navigate = useNavigate()
 
     return (
-        <Login fetchUsers={fetchUsers} login={login} navigate={useNavigate}/>
+        <Login fetchUsers={fetchUsers} login={login} navigate={navigate}/>
     );
 };
 

@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 import Input from "../../components/common/fields/Input";
-import InputWithLink from "../../components/common/fields/InputWithLink";
 import CentralPlace from "../../components/CentralPlace";
 
 const ForgotPassword = () => {
@@ -16,7 +15,7 @@ const ForgotPassword = () => {
             <div className='bg-white text-lg font-medium p-10 mb-10 w-full max-w-md'>
                 <div className='pb-9 text-center'>
                     <h1 className='text-4xl font-bold'>Forgot password?</h1>
-                    <div>Changed your mind? <Link to='/login' className='text-blue-600 hover:underline'>Sign in here</Link></div>
+                    <div>Changed your mind? <Link to='/auth/login' className='text-blue-600 hover:underline'>Sign in here</Link></div>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-6">
